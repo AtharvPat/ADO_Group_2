@@ -1,22 +1,5 @@
-## AVNEET 
-closePageFile
-destroyPageFile
-getBlockPos
-readFirstBlock
-readNextBlock
-
-## ATHARV
-
-createPageFile
-openPageFile
-readBlock
-readCurrentBlock
-writeBlock
-appendEmptyBlock
-
-## MANTHAN
-destroyPageFile
-readPreviousBlock
-readLastBlock
-writeCurrentBlock
-ensureCapacity
+Name | function
+--- | ---
+Avneet | '3. closePageFile', '6. getBlockPos', '7. readFirstBlock, '10. readNextBlock', '14. appendEmptyBlock'
+Atharv | '1. createPageFile' , '2. openPageFile', '5. readBlock', '9. readCurrentBlock','12. writeBlock'
+Manthan | '4. destroyPageFile', '8. readPreviousBlock', '11. readLastBlock', '13. writeCurrentBlock', '15. ensureCapacity'
