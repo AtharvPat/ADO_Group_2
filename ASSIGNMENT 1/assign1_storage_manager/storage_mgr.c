@@ -18,7 +18,7 @@ void CHECK_FILE(char *File_Name)
     }
 }
 
-void CHECK_FILE_HANDLE(SM_FileHandle *File_Handel)
+void CHECK_FILE_HANDLE(SM_FileHandle *File_Handle)
 {
     if (File_Handle == NULL) {
     return RC_FILE_HANDLE_NOT_INIT; // Returing Error Code
@@ -68,13 +68,13 @@ return RC_OK; // Return success Code
 
 /* ***************************************************************************************** */
 // Function to Open a file
-RC openPageFile(char *File_Name, SM_FileHandle *File_Handel){
+RC openPageFile(char *File_Name, SM_FileHandle *File_Handle){
 
 // Checking if the file exists
 CHECK_FILE(File_Name);
 
-// Checking if the file handel is NULL
-CHECK_FILE_HANDLE(File_Handel);
+// Checking if the file handle is NULL
+CHECK_FILE_HANDLE(File_Handle);
 
 
 // Open File in read and write mode
@@ -87,14 +87,14 @@ if (fseek(file_position, 0, SEEK_END) != 0)
     return RC_READ_NON_EXISTING_PAGE; // retrun error if the file_pointer cannot move 
 }
 
-// Store file pointer in file handel for future use
-File_Handel->mgmtInfo = file_position;
-File_Handel->fileName = File_Name;
-File_Handel->curPagePos = 0;
+// Store file pointer in file handle for future use
+File_Handle->mgmtInfo = file_position;
+File_Handle->fileName = File_Name;
+File_Handle->curPagePos = 0;
 
   // Count the number of Pages
 long fileSize = ftell(file_position);
-File_Handel->totalNumPages = (int) (fileSize / PAGE_SIZE);
+File_Handle->totalNumPages = (int) (fileSize / PAGE_SIZE);
 return RC_OK;
 }
 
@@ -102,7 +102,7 @@ return RC_OK;
 
 RC readBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page) {
 
-// Checking if the file handel is Vaid 
+// Checking if the file handle is Vaid 
 CHECK_FILE_HANDLE(File_Handle);
 
 // Check if the Memory pointer is not NUll 
@@ -113,7 +113,7 @@ CHECK_MEMORY_PAGE(Memory_Page);
     return RC_READ_NON_EXISTING_PAGE;
   }
 
-// Get file pointer from the file handel
+// Get file pointer from the file handle
 FILE *file_position = File_Handle->mgmtInfo;
 CHECK_FILE(file_position);
 
@@ -154,8 +154,8 @@ RC readCurrentBlock(SM_FileHandle *File_Handle, SM_PageHandle Memory_Page) {
 
 RC writeBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memeory_Page) {
 
-// Checking if the file handel is Vaid 
-CHECK_FileHandel(File_Handle);
+// Checking if the file handle is Vaid 
+CHECK_FileHandle(File_Handle);
 
 // Check if the Memory pointer is not NUll 
 CHECK_MEMORY_PAGE(Memeory_Page);
@@ -181,7 +181,7 @@ int ByteOffSet = PG_Num * PAGE_SIZE;
 
 // Write the data from the memory into the file
   if (fwrite(Memory_Page, sizeof(char), strlen(memPage), file_position) < PAGE_SIZE) {
-    
+
     return RC_WRITE_FAILED; // Return Faile Code if Failed 
   }
   File_Handle->curPagePos = Page_Num;
