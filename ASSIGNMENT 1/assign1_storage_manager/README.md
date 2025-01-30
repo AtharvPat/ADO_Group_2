@@ -6,25 +6,25 @@ In this Repository we wroked with a Storage Manager. The Storage Manager is resp
 
 File | Description
 -----|-------------
-'storage_mgr.*' | This file contains the functions for managing the Storage Manager.
-'dberror.*' | This file contains all possible errors and Keeps tracks of error.
-'test_assign1.c' | This file contains the main function for testing the Storage Manager.
-'test_helper.h' | This file contains helper functions for testing the Storage Manager.
+`storage_mgr.*` | This file contains the functions for managing the Storage Manager.
+`dberror.*` | This file contains all possible errors and Keeps tracks of error.
+`test_assign1.c` | This file contains the main function for testing the Storage Manager.
+`test_helper.h` | This file contains helper functions for testing the Storage Manager.
 
 ## Environment versions 
 
 Example for one of our environment versions
 
-'''shell 
+```shell 
 make --version
 GNU Make 3.81
 built for i386-apple-darwin11.3.0
-'''
+```
 
-'''shell 
+```shell 
 % gcc ---version 
 Apple clang version 16.0.
-'''
+```
 
 ## How to Run the Code 
 Step -1 : Clone the repository.
