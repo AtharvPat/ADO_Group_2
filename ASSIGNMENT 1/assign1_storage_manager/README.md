@@ -29,9 +29,9 @@ Apple clang version 16.0.
 ## How to Run the Code 
 Step -1 : Clone the repository.
 Step -2 : Navigate to the Folder with all the files.
-Step -3 : Run the command 'make clean' to clear old make file. 
-Step -4 : Run the command 'make' to compile the code.
-Step -5 : Run the command './test_assign1' to run the test.
+Step -3 : Run the command `make clean` to clear old make file. 
+Step -4 : Run the command `make` to compile the code.
+Step -5 : Run the command `./test_assign1` to run the test.
 
 
 
