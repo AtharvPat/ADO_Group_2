@@ -14,7 +14,6 @@ A20588887 |[Manthan Surjuse](https://github.com/Manthan0120) | Worked on Writing
 
 ## Files 
 
- # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%201/assign1_storage_manager/screenshots/image.png)
  # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%201/assign1_storage_manager/images/image.png)
 
 
