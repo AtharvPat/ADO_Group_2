@@ -16,6 +16,8 @@ char *testName;
 /* prototypes for test functions */
 static void testCreateOpenClose(void);
 static void testSinglePageContent(void);
+static void testMultiplePage(void);      // -> extra Test Case
+static void testCapacityExpansion(void);  // -> Extra Test Case
 
 /* main function running all tests */
 int
@@ -27,6 +29,8 @@ main (void)
 
   testCreateOpenClose();
   testSinglePageContent();
+  testMultiplePage();
+  testCapacityExpansion(); 
 
   return 0;
 }
@@ -96,5 +100,57 @@ testSinglePageContent(void)
   // destroy new page file
   TEST_CHECK(destroyPageFile (TESTPF));  
   
+  TEST_DONE();
+}
+
+
+void testMultiplePage(void) {
+  SM_FileHandle fh;
+  SM_PageHandle ph;
+  int i;
+
+  testName = "test multiple page";
+
+  ph = (SM_PageHandle) calloc(PAGE_SIZE, sizeof(char));
+
+  TEST_CHECK(createPageFile(TESTPF));
+  TEST_CHECK(openPageFile(TESTPF, &fh));
+  printf("created and opened  a file\n");
+
+  // add new page
+  TEST_CHECK(appendEmptyBlock(&fh));
+  printf("Add new page with zero bytes in it \n");
+
+  // read new page into handle
+  TEST_CHECK(readNextBlock(&fh, ph));
+  // the page should be empty (zero bytes)
+  for (i = 0; i < PAGE_SIZE; i++) {
+    ASSERT_TRUE(ph[i] == 0,
+                "zero byte expected in new page of freshly initialized page");
+  }
+  printf("\n new block was empty\n");
+
+  TEST_CHECK(closePageFile(&fh));
+  TEST_CHECK(destroyPageFile(TESTPF));
+  TEST_DONE();
+} 
+
+
+void testCapacityExpansion(void) {
+  SM_FileHandle fh;
+
+  testName = "test capacity expansion";
+
+  TEST_CHECK(createPageFile(TESTPF));
+  TEST_CHECK(openPageFile(TESTPF, &fh));
+
+  ASSERT_TRUE(fh.totalNumPages == 1, "Capacity not  expanded yet");
+  TEST_CHECK(ensureCapacity(5, &fh));
+  ASSERT_TRUE(fh.totalNumPages == 5, "Capacity Expanded to 5");
+  TEST_CHECK(ensureCapacity(10, &fh));
+  ASSERT_TRUE(fh.totalNumPages == 10, "Capacity Again Expanded to 10");
+
+  TEST_CHECK(closePageFile(&fh));
+  TEST_CHECK(destroyPageFile(TESTPF));
   TEST_DONE();
 }
