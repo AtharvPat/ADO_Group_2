@@ -4,7 +4,7 @@ In this Repository we wroked with a Storage Manager. The Storage Manager is resp
 
 ## Files 
 
- # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%201/assign1_storage_manager/screenshots/Screenshot%202025-01-30%20at%205.58.24%E2%80%AFPM.)
+ # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%201/assign1_storage_manager/screenshots/image.png)
 
 
 
