@@ -6,4 +6,4 @@ Manthan | '4. destroyPageFile', '8. readPreviousBlock', '11. readLastBlock', '13
 
 
 ## take reference from the following code
-https://github.com/hanggrian/IIT-CS525/blob/main/assign1/storage_mgr.c
+https://github.com/hanggrian/IIT-CS525/tree/main/assign2
