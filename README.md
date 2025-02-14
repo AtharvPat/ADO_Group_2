@@ -1,8 +1,8 @@
 Name | function
 --- | ---
-Avneet | '3. closePageFile', '6. getBlockPos', '7. readFirstBlock, '10. readNextBlock', '14. appendEmptyBlock'
-Atharv | '1. createPageFile' , '2. openPageFile', '5. readBlock', '9. readCurrentBlock','12. writeBlock'
-Manthan | '4. destroyPageFile', '8. readPreviousBlock', '11. readLastBlock', '13. writeCurrentBlock', '15. ensureCapacity'
+Avneet | '18. isHitPageCache', '19. updateLRUOrder', '20. addPageToPageCacheWithFIFO, '21. addPageToPageCacheWithLRU', '24. searchPageFromCache', '25. getFrameContents', '26. getDirtyFlags', '27. getFixComits', '28. getNumReadIO'
+Atharv | '1. bufferPool' , '2. shutdownBufferPool', '3. forceFlushPool', '4. pinPage','7. forcePage', '8. createFrameNode','9. resetFrameNode','10. createhash', '16. isFull', '17. isFree'
+Manthan | '5. markDirty', '6. uniPage', '11. createPageCache','12. freeFrame', '13. freeFileHandle','14. freeHash', '15. freePageCache', '22. removePageWithFIFO', '23. removePageWithLRU', '29. getNumWriteIO' 
 
 
 ## take reference from the following code
