@@ -110,6 +110,20 @@ RC readPageData(int pageNum, SM_FileHandle *File_Handle, char *data)
     return RC_OK;
 }
 
+PageCache *getPageCache(BM_BufferPool *bufferPool) 
+{
+    return (PageCache *)bufferPool->mgmtData;
+}
+
+void updateFrameAndTail(PageCache *cache, Frame **frame) 
+{
+    // Assign the frame at the current head position
+    *frame = cache->frames[cache->head];
+
+    // Update the tail to point to the previous frame, with circular indexing
+    cache->tail = (cache->head == 0) ? cache->capacity - 1 : cache->head - 1;
+}
+
 /* ****************************************** Changed *********************************************** */
 
 RC initBufferPool(BM_BufferPool *const bufferPool, const char *const File_Name,
@@ -505,6 +519,115 @@ int isEmpty(PageCache *cache)
     }
     return (cache->frameCnt == 0);
 }
+/* **************************************** changed ************************************************* */
+
+
+RC addPageToPageCacheWithLRU(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle,
+    const PageNumber pageNum)
+{
+// Retrieve the page cache from the buffer pool
+PageCache *cache = bufferPool->mgmtData;
+
+int frameIndex = -1;
+Frame *frame = NULL;
+
+int *hashTable = cache->hashTable;
+
+// Flag indicating whether the cache was full
+int fullFlag = 0;
+
+// Check if the cache is full
+if (isFull(cache))
+{
+// The least recently used page is located at the start of the hashTable
+int leastUsedPageNum = hashTable[0];
+
+// Remove the least recently used page from the cache
+frame = removePageWithLRU(bufferPool, Page_Handle, leastUsedPageNum);
+
+fullFlag = 1; // Mark the cache as full
+}
+else
+{
+// Search for an available empty frame in the cache
+int i = 0;
+while (i < bufferPool->pageFrameCount)
+{
+if (hashTable[i] == -1) // If an empty frame is found
+{
+frameIndex = i;
+break;
+}
+i++;
+}
+
+// If no empty frame is found, return an error
+CHECK_FRAME_INDEX(frameIndex);
+
+// Retrieve the frame from the cache at the found index
+frame = cache->frames[frameIndex];
+}
+
+// If no frame is available or allocated, return an error
+CHECK_FRAME(frame);
+
+// Access the file handle for reading the page content
+SM_FileHandle *File_Handle = cache->File_Handle;
+
+// Ensure that the requested page exists on disk
+RC ensure_result = validatePageExistence(pageNum, File_Handle);
+if (ensure_result != RC_OK)
+{
+return ensure_result;
+}
+
+// Read the page's data from the disk into the frame's data buffer
+RC read_result = readPageData(pageNum, File_Handle, frame->data);
+if (read_result != RC_OK)
+{
+return read_result;
+}
+
+frame->pinCount = 1; // Pin the frame since it's now in use
+// Increment the number of read operations
+cache->numRead++;
+
+// Update the frame's metadata (page number, pin count, and dirty bit)
+frame->dirtyBit = 0; 
+frame->pageNum = pageNum;// Page is clean
+
+
+// Set the page number and data in the provided page handle
+Page_Handle->pageNum = pageNum;
+
+
+// Increment the frame count in the cache
+cache->frameCnt++;
+
+Page_Handle->data = frame->data;
+
+// If the cache was full, remove the least recently used page and update hashTable
+if (fullFlag != 1)
+{ 
+hashTable[frameIndex] = pageNum;   
+}
+else
+{
+// Store the page number in the available spot in the hashTable
+// Shift the entries in the hashTable to make space for the new page
+int i = 0;
+while (i < cache->capacity - 1)
+{
+hashTable[i] = hashTable[i + 1];
+i++;
+}
+
+// Place the new page at the end of the hashTable
+hashTable[cache->capacity - 1] = pageNum;
+}
+
+return RC_OK; // Return success after the page is added to the cache
+}
 
 /* ************************************** chnaged *************************************************** */
 
@@ -579,176 +702,8 @@ RC updateLRUOrder(PageCache *cache, int pageNum)
     return RC_OK;
 }
 
-/* **************************************** changed ************************************************* */
-
-
-RC addPageToPageCacheWithLRU(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle,
-                             const PageNumber pageNum)
-{
-    // Retrieve the page cache from the buffer pool
-    PageCache *cache = bufferPool->mgmtData;
-
-    int frameIndex = -1;
-    Frame *frame = NULL;
-
-    int *hashTable = cache->hashTable;
-
-    // Flag indicating whether the cache was full
-    int fullFlag = 0;
-
-    // Check if the cache is full
-    if (isFull(cache))
-    {
-        // The least recently used page is located at the start of the hashTable
-        int leastUsedPageNum = hashTable[0];
-
-        // Remove the least recently used page from the cache
-        frame = removePageWithLRU(bufferPool, Page_Handle, leastUsedPageNum);
-
-        fullFlag = 1; // Mark the cache as full
-    }
-    else
-    {
-        // Search for an available empty frame in the cache
-        int i = 0;
-        while (i < bufferPool->pageFrameCount)
-        {
-            if (hashTable[i] == -1) // If an empty frame is found
-            {
-                frameIndex = i;
-                break;
-            }
-            i++;
-        }
-
-        // If no empty frame is found, return an error
-        CHECK_FRAME_INDEX(frameIndex);
-
-        // Retrieve the frame from the cache at the found index
-        frame = cache->frames[frameIndex];
-    }
-
-    // If no frame is available or allocated, return an error
-    CHECK_FRAME(frame);
-
-    // Access the file handle for reading the page content
-    SM_FileHandle *File_Handle = cache->File_Handle;
-
-    // Ensure that the requested page exists on disk
-    RC ensure_result = validatePageExistence(pageNum, File_Handle);
-    if (ensure_result != RC_OK)
-    {
-        return ensure_result;
-    }
-
-    // Read the page's data from the disk into the frame's data buffer
-    RC read_result = readPageData(pageNum, File_Handle, frame->data);
-    if (read_result != RC_OK)
-    {
-        return read_result;
-    }
-
-    frame->pinCount = 1; // Pin the frame since it's now in use
-    // Increment the number of read operations
-    cache->numRead++;
-
-    // Update the frame's metadata (page number, pin count, and dirty bit)
-    frame->dirtyBit = 0; 
-    frame->pageNum = pageNum;// Page is clean
-    
-
-    // Set the page number and data in the provided page handle
-    Page_Handle->pageNum = pageNum;
-    
-
-    // Increment the frame count in the cache
-    cache->frameCnt++;
-
-    Page_Handle->data = frame->data;
-
-    // If the cache was full, remove the least recently used page and update hashTable
-    if (fullFlag != 1)
-    {
-        hashTable[frameIndex] = pageNum;
-
-    }
-    else
-    {
-        // Store the page number in the available spot in the hashTable
-                // Shift the entries in the hashTable to make space for the new page
-                int i = 0;
-                while (i < cache->capacity - 1)
-                {
-                    hashTable[i] = hashTable[i + 1];
-                    i++;
-                }
-        
-                // Place the new page at the end of the hashTable
-                hashTable[cache->capacity - 1] = pageNum;
-    }
-
-    return RC_OK; // Return success after the page is added to the cache
-}
-
 /* ************************************** changed *************************************************** */
 
-RC addPageToPageCacheWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle, int pageNum)
-{
-    // Get the current page cache from the buffer pool
-    PageCache *cache = bufferPool->mgmtData;
-
-    // If the cache is full, we need to remove the least recently used page (FIFO replacement)
-    if (isFull(cache))
-    {
-        // Attempt to remove a page using FIFO
-        RC removeResult = removePageWithFIFO(bufferPool, Page_Handle);
-        if (removeResult != RC_OK)
-        {
-            return RC_ERROR; // Return error if FIFO page removal fails
-        }
-    }
-
-    // Determine the next available frame (FIFO: Circular buffer behavior)
-    cache->tail = (cache->tail + 1) % cache->capacity;
-
-    // Access the file handle from the cache
-    SM_FileHandle *File_Handle = cache->File_Handle;
-    Frame *frame = cache->frames[cache->tail];
-
-    // Ensure that there's enough space to store the page on disk
-    RC ensure_result = validatePageExistence(pageNum, File_Handle);
-    if (ensure_result != RC_OK)
-    {
-        return ensure_result;
-    }
-
-    // Read the page's data from the disk into the frame's data buffer
-    RC read_result = readPageData(pageNum, File_Handle, frame->data);
-    if (read_result != RC_OK)
-    {
-        return read_result;
-    }
-
-    // Update cache statistics
-    cache->numRead++;
-
-    frame->dirtyBit = 0;
-
-    // Update the frame's metadata
-    frame->pageNum = pageNum;
-    // Mark the page as clean initially
-
-    // Set the page information in the page handle for the caller to access
-    Page_Handle->pageNum = pageNum;
-
-    frame->pinCount = 1; // Pin the frame (indicates it's in use)
-
-    // Increment the number of frames currently in the cache
-    Page_Handle->data = frame->data;
-    cache->frameCnt++;
-
-    return RC_OK; // Return success after adding the page
-}
 
 /* ************************************* chsanged **************************************************** */
 
@@ -807,6 +762,67 @@ int *getDirtyFlags(BM_BufferPool *const bufferPool)
 }
 
 /* *************************************** changed ************************************************** */
+
+RC addPageToPageCacheWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle, int pageNum)
+{
+    PageCache *cache = getPageCache(bufferPool);
+
+    // If the cache is full, we need to remove the least recently used page (FIFO replacement)
+    if (isFull(cache)) 
+    {
+        // Attempt to remove a page using FIFO replacement policy
+        RC removeResult = removePageWithFIFO(bufferPool, Page_Handle);
+        
+        if (removeResult != RC_OK) 
+        {
+            fprintf(stderr, "Error: Failed to remove page using FIFO policy.\n");
+            return removeResult; // Return the actual error code instead of a generic error
+        }
+    }
+
+    // Determine the next available frame (FIFO: Circular buffer behavior)
+    cache->tail = (cache->tail + 1) % cache->capacity;
+
+    // Access the file handle from the cache
+    SM_FileHandle *File_Handle = cache->File_Handle;
+    Frame *frame = cache->frames[cache->tail];
+
+    // Ensure that there's enough space to store the page on disk
+    RC ensure_result = validatePageExistence(pageNum, File_Handle);
+    if (ensure_result != RC_OK)
+    {
+        return ensure_result;
+    }
+
+    // Read the page's data from the disk into the frame's data buffer
+    RC read_result = readPageData(pageNum, File_Handle, frame->data);
+    if (read_result != RC_OK)
+    {
+        return read_result;
+    }
+
+    // Update cache statistics
+    cache->numRead++;
+
+    frame->dirtyBit = 0;
+
+    // Update the frame's metadata
+    frame->pageNum = pageNum;
+    // Mark the page as clean initially
+
+    // Set the page information in the page handle for the caller to access
+    Page_Handle->pageNum = pageNum;
+
+    frame->pinCount = 1; // Pin the frame (indicates it's in use)
+
+    // Increment the number of frames currently in the cache
+    Page_Handle->data = frame->data;
+    cache->frameCnt++;
+
+    return RC_OK; // Return success after adding the page
+}
+/* ************************************** changed *************************************************** */
+
 
 int *getFixCounts(BM_BufferPool *const bufferPool)
 {
@@ -1098,30 +1114,37 @@ RC removePageWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *const Page
     // Locate the first unpinned frame
     
 // Check if the frame is pinned
-if (frame->pinCount > 0)
+if (frame->pinCount > 0) 
 {
-    // Loop through frames and find one that's not pinned
-    while (cache->frames[cache->head]->pinCount > 0)
+    // Use a for loop to find an unpinned frame
+    for (;;)
     {
-        // Move head to the next frame
+        // Check if the current frame is pinned
+        if (cache->frames[cache->head]->pinCount == 0)
+        {
+            break;  // Found an unpinned frame, exit loop
+        }
+    
+        // Move to the next frame in a circular manner
         cache->head = (cache->head + 1) % cache->capacity;
     }
-
-    // Once we find a frame that's not pinned, assign it
-    frame = cache->frames[cache->head];
-
-    // If dirty, write it back before removal
-    cache->tail = cache->head - 1;
-}
+    
+    updateFrameAndTail(cache, &frame);
+} 
 
 // Check if the frame is dirty
 if (frame->dirtyBit == 1)
 {
     // Only force a page write if it's not pinned
-    if (frame->pinCount == 0)
+    if (frame->pinCount == 0) 
     {
         forcePage(bufferPool, Page_Handle);  // Force the dirty page to disk
         cache->numWrite++;  // Increment the write count
+    } 
+    else 
+    {
+        // Handle case where the frame is still pinned
+        printf("Page cannot be written to disk as it is currently pinned.\n");
     }
 }
 
