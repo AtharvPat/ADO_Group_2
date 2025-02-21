@@ -1,3 +1,6 @@
+// This file implements interfaces related to Statistics Buffer
+// defined in buffer_mgr.h header.
+
 #include "buffer_mgr_stat.h"
 #include "buffer_mgr.h"
 
@@ -5,48 +8,53 @@
 #include <stdlib.h>
 
 // local functions
-static void printStrat (BM_BufferPool *const bm);
+static void printStrat (BM_BufferPool *const bufferPool);
 
 // external functions
-void 
-printPoolContent (BM_BufferPool *const bm)
+void
+printPoolContent (BM_BufferPool *const bufferPool)
 {
 	PageNumber *frameContent;
-	bool *dirty;
+	int *dirty;
 	int *fixCount;
 	int i;
 
-	frameContent = getFrameContents(bm);
-	dirty = getDirtyFlags(bm);
-	fixCount = getFixCounts(bm);
+	frameContent = getFrameContents(bufferPool);
+	dirty = getDirtyFlags(bufferPool);
+	fixCount = getFixCounts(bufferPool);
 
 	printf("{");
-	printStrat(bm);
-	printf(" %i}: ", bm->numPages);
+	printStrat(bufferPool);
+	printf(" %i}: ", bufferPool->pageFrameCount);
 
-	for (i = 0; i < bm->numPages; i++)
+	for (i = 0; i < bufferPool->pageFrameCount; i++)
 		printf("%s[%i%s%i]", ((i == 0) ? "" : ",") , frameContent[i], (dirty[i] ? "x": " "), fixCount[i]);
 	printf("\n");
+	free(frameContent);
+	free(dirty);
+	free(fixCount);
 }
 
 char *
-sprintPoolContent (BM_BufferPool *const bm)
+sprintPoolContent (BM_BufferPool *const bufferPool)
 {
 	PageNumber *frameContent;
-	bool *dirty;
+	int *dirty;
 	int *fixCount;
 	int i;
 	char *message;
 	int pos = 0;
 
-	message = (char *) malloc(256 + (22 * bm->numPages));
-	frameContent = getFrameContents(bm);
-	dirty = getDirtyFlags(bm);
-	fixCount = getFixCounts(bm);
+	message = (char *) malloc(256 + (22 * bufferPool->pageFrameCount));
+	frameContent = getFrameContents(bufferPool);
+	dirty = getDirtyFlags(bufferPool);
+	fixCount = getFixCounts(bufferPool);
 
-	for (i = 0; i < bm->numPages; i++)
+	for (i = 0; i < bufferPool->pageFrameCount; i++)
 		pos += sprintf(message + pos, "%s[%i%s%i]", ((i == 0) ? "" : ",") , frameContent[i], (dirty[i] ? "x": " "), fixCount[i]);
-
+	free(frameContent);
+	free(dirty);
+	free(fixCount);
 	return message;
 }
 
@@ -79,9 +87,9 @@ sprintPageContent (BM_PageHandle *const page)
 }
 
 void
-printStrat (BM_BufferPool *const bm)
+printStrat (BM_BufferPool *const bufferPool)
 {
-	switch (bm->strategy)
+	switch (bufferPool->replacementPolicy)
 	{
 	case RS_FIFO:
 		printf("FIFO");
@@ -99,7 +107,7 @@ printStrat (BM_BufferPool *const bm)
 		printf("LRU-K");
 		break;
 	default:
-		printf("%i", bm->strategy);
+		printf("%i", bufferPool->replacementPolicy);
 		break;
 	}
 }
