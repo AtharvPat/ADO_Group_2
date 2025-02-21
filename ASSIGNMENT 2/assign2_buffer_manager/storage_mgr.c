@@ -189,10 +189,13 @@ RC readBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page)
   }
 
   // update the current page in the file Handle
+  // File_Handle->curPagePos = PG_Num;
+
+  // return RC_OK; // Success Code
+
+  fread(Memory_Page, sizeof(char), PAGE_SIZE, file_position);
   File_Handle->curPagePos = PG_Num;
-
-  return RC_OK; // Success Code
-
+  return RC_OK;
 }
 
 
@@ -200,39 +203,74 @@ RC readBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page)
 
 
 
-RC writeBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page)
-{
+// RC writeBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page)
+// {
 
-  // Checking if the file handle is Vaid
-  CHECK_FILE_HANDLE(File_Handle);
+//   // Checking if the file handle is Vaid
+//   CHECK_FILE_HANDLE(File_Handle);
 
-  // Check if the Memory pointer is not NUll
-  CHECK_MEMORY_PAGE(Memory_Page);
+//   // Check if the Memory pointer is not NUll
+//   CHECK_MEMORY_PAGE(Memory_Page);
 
-  // Check if the requested file is in the bounds
-  if (PG_Num < 0 || PG_Num >= File_Handle->totalNumPages)
-  {
-    return RC_READ_NON_EXISTING_PAGE;
+//   // Check if the requested file is in the bounds
+//   if (PG_Num < 0 || PG_Num >= File_Handle->totalNumPages)
+//   {
+//     return RC_READ_NON_EXISTING_PAGE;
+//   }
+//   // assign File Position from File_Handle
+//   int File_position = fileno((FILE *)File_Handle->mgmtInfo);
+//   if (File_position < 0)
+//   {
+//     return RC_FILE_NOT_FOUND;
+//   }
+
+//   // Find Byte Offset of the Page
+//   off_t ByteOffset = PG_Num * PAGE_SIZE;
+
+//   // Write memory page to the file
+//   ssize_t bytesWritten = pwrite(File_position, Memory_Page, PAGE_SIZE, ByteOffset);
+//   if (bytesWritten < PAGE_SIZE)
+//   {
+//     return RC_WRITE_FAILED;
+//   }
+
+//   // write data from memory, update page
+//   fwrite(Memory_Page, sizeof(char), strlen(Memory_Page), File_position);
+//   File_Handle->curPagePos = PG_Num;
+//   return RC_OK; // Return Success Code
+// }
+
+
+RC writeBlock(int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page) {
+  // validates parameters
+  if (File_Handle == NULL) {
+    return RC_FILE_HANDLE_NOT_INIT;
   }
-  // assign File Position from File_Handle
-  int File_position = fileno((FILE *)File_Handle->mgmtInfo);
-  if (File_position < 0)
-  {
-    return RC_FILE_NOT_FOUND;
-  }
 
-  // Find Byte Offset of the Page
-  off_t ByteOffset = PG_Num * PAGE_SIZE;
-
-  // Write memory page to the file
-  ssize_t bytesWritten = pwrite(File_position, Memory_Page, PAGE_SIZE, ByteOffset);
-  if (bytesWritten < PAGE_SIZE)
-  {
+  if (Memory_Page == NULL) {
     return RC_WRITE_FAILED;
   }
 
+  if (PG_Num < 0 || PG_Num >= File_Handle->totalNumPages) {
+    return RC_READ_NON_EXISTING_PAGE;
+  }
+
+  // get the non-null file pointer
+  FILE *file_postiton = File_Handle->mgmtInfo;
+  if (file_postiton == NULL) {
+    return RC_FILE_NOT_FOUND;
+  }
+
+  // seek to the offset of the file
+  int offset = PG_Num * PAGE_SIZE;
+  if (fseek(file_postiton, offset, SEEK_SET) != 0) {
+    return RC_READ_NON_EXISTING_PAGE;
+  }
+
+  // write data from memory, update page
+  fwrite(Memory_Page, sizeof(char), strlen(Memory_Page), file_postiton);
   File_Handle->curPagePos = PG_Num;
-  return RC_OK; // Return Success Code
+  return RC_OK;
 }
 
 /* ***************************************************************************************** change this */
@@ -409,30 +447,57 @@ RC writeCurrentBlock(SM_FileHandle *File_Handle, SM_PageHandle Memory_Page)
 RC ensureCapacity(int numOf_PG, SM_FileHandle *File_Handle)
 {
   // Validate the file handle using the CHECK_FILE_HANDLE helper function
-  CHECK_FILE_HANDLE(File_Handle);
+  // CHECK_FILE_HANDLE(File_Handle);
 
-  // Validate the number of pages (ensure it is at least 1)
-  if (numOf_PG < 1)
-  {
+  // // Validate the number of pages (ensure it is at least 1)
+  // if (numOf_PG < 1)
+  // {
+  //   return RC_READ_NON_EXISTING_PAGE;
+  // }
+
+  // // Append remaining blocks if the current number of pages is less than required
+  // int current_NumberOf_PG = File_Handle->totalNumPages;
+  // int count = numOf_PG - current_NumberOf_PG;
+
+  // int i = 0; // Initialize the counter
+  // while (i < count)
+  // {
+  //   appendEmptyBlock(File_Handle);
+  //   i++; // Increment the counter
+  // }
+
+ 
+  if (File_Handle == NULL) {
+    return RC_FILE_HANDLE_NOT_INIT;
+  }
+  if (numOf_PG < 1) {
     return RC_READ_NON_EXISTING_PAGE;
   }
 
-  // Append remaining blocks if the current number of pages is less than required
-  int current_NumberOf_PG = File_Handle->totalNumPages;
-  int count = numOf_PG - current_NumberOf_PG;
-
-  int i = 0; // Initialize the counter
-  while (i < count)
-  {
+  // append remaining blocks
+  int currentNumPages = File_Handle->totalNumPages;
+  int cnt = numOf_PG - currentNumPages;
+  for (int i = 0; i < cnt; i++) {
     appendEmptyBlock(File_Handle);
-    i++; // Increment the counter
   }
 
+  // printf("total page number = %d\n", fHandle->totalNumPages);
+  // printf("number of page number = %d\n", numberOfPages);
+
+  // check whether the total number of pages is the same as required
+  // if (fHandle->totalNumPages < numberOfPages) {
+  //   return RC_WRITE_FAILED;
+  // }
+  // return RC_OK;
+
+ 
+ 
   // Verify if the total number of pages matches the required number
-  if (File_Handle->totalNumPages != numOf_PG)
+  if (File_Handle->totalNumPages < numOf_PG)
   {
     return RC_WRITE_FAILED;
   }
 
   return RC_OK;
 }
+

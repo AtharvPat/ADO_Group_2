@@ -7,7 +7,7 @@
  *                    handle data structures                *
  ************************************************************/
 typedef struct SM_FileHandle {
-	char *fileName;
+	char *File_Name;
 	int totalNumPages;
 	int curPagePos;
 	void *mgmtInfo;
@@ -20,24 +20,24 @@ typedef char* SM_PageHandle;
  ************************************************************/
 /* manipulating page files */
 extern void initStorageManager (void);
-extern RC createPageFile (char *fileName);
-extern RC openPageFile (char *fileName, SM_FileHandle *fHandle);
-extern RC closePageFile (SM_FileHandle *fHandle);
+extern RC createPageFile (char *File_Name);
+extern RC openPageFile (char *File_Name, SM_FileHandle *File_Handle);
+extern RC closePageFile (SM_FileHandle *File_Handle);
 extern RC destroyPageFile (char *fileName);
 
 /* reading blocks from disc */
-extern RC readBlock (int pageNum, SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern int getBlockPos (SM_FileHandle *fHandle);
-extern RC readFirstBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC readPreviousBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC readCurrentBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC readNextBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC readLastBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
+extern RC readBlock (int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern int getBlockPos (SM_FileHandle *File_Handle);
+extern RC readFirstBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC readPreviousBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC readCurrentBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC readNextBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC readLastBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
 
 /* writing blocks to a page file */
-extern RC writeBlock (int pageNum, SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC writeCurrentBlock (SM_FileHandle *fHandle, SM_PageHandle memPage);
-extern RC appendEmptyBlock (SM_FileHandle *fHandle);
-extern RC ensureCapacity (int numberOfPages, SM_FileHandle *fHandle);
+extern RC writeBlock (int PG_Num, SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC writeCurrentBlock (SM_FileHandle *File_Handle, SM_PageHandle Memory_Page);
+extern RC appendEmptyBlock (SM_FileHandle *File_Handle);
+extern RC ensureCapacity (int numOf_PG, SM_FileHandle *File_Handle);
 
 #endif
