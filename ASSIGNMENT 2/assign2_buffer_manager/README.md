@@ -4,6 +4,9 @@ In this Repository, we worked with a Buffer Pool Manager. The Buffer Pool Manage
 
 
 ## Implementation Video link 
+
+Basic walkthrough of our Buffer Manager implementation for Assignment 2. We’ve looked at the code, the file structure, built the project, and ran the tests.   
+
 https://drive.google.com/file/d/1HJOY1WxQtkWdD2q-S0VvMUmQxMgWrodI/view?usp=sharing
 ## Contributions
 
