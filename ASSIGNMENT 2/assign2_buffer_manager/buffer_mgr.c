@@ -5,23 +5,8 @@
 #include "buffer_mgr.h"
 #include "storage_mgr.h"
 
-/* ***************************************************************************************** */
+/* ***************************************** HELPER FUNCTIONS ************************************************ */
 
-/*
-bm = bufferPool
-pageFileName = File_Name
-numPages = pageFrameCount
-strategy = replacementPolicy
-stratData = strategyData
-pageCache = cache
-fhandle = File_Handle
-
-hash = hashTable
-frames = frames
-page = Page_Handle
-
-
-*/
 
 RC CHECK_BUFFERPOOL(BM_BufferPool *const bufferPool)
 {
@@ -124,7 +109,7 @@ void updateFrameAndTail(PageCache *cache, Frame **frame)
     cache->tail = (cache->head == 0) ? cache->capacity - 1 : cache->head - 1;
 }
 
-/* ****************************************** Changed *********************************************** */
+/* ***************************************************************************************** */
 
 RC initBufferPool(BM_BufferPool *const bufferPool, const char *const File_Name,
                   const int pageFrameCount, ReplacementStrategy replacementPolicy,
@@ -163,7 +148,7 @@ RC initBufferPool(BM_BufferPool *const bufferPool, const char *const File_Name,
     return RC_OK;
 }
 
-/* ***************************************** Changed ************************************************ */
+/* ***************************************************************************************** */
 
 RC shutdownBufferPool(BM_BufferPool *const bufferPool)
 {
@@ -192,7 +177,7 @@ RC shutdownBufferPool(BM_BufferPool *const bufferPool)
     return RC_OK;
 }
 
-/* ************************************* Changed ++ **************************************************** */
+/* ***************************************************************************************** */
 
 // forceFlushPool is to cause all dirty pages from the buffer pool to be written to disk
 // -- check whether there are dirty pages as well as the pin counts is equal to 0
@@ -249,7 +234,7 @@ RC forceFlushPool(BM_BufferPool *const bufferPool)
     return RC_OK;
 }
 
-/* ********************************** Chnanged ++ ******************************************************* */
+/* ***************************************************************************************** */
 
 RC pinPage(BM_BufferPool *const bufferPool, BM_PageHandle *const pageHandle,
            const PageNumber pageNum)
@@ -295,7 +280,7 @@ RC pinPage(BM_BufferPool *const bufferPool, BM_PageHandle *const pageHandle,
                : addPageToPageCacheWithLRU(bufferPool, pageHandle, pageNum);
 }
 
-/* *********************************** Changed ****************************************************** */
+/* ***************************************************************************************** */
 
 RC forcePage(BM_BufferPool *const bufferPool, BM_PageHandle *const pageHandle)
 {
@@ -322,7 +307,7 @@ RC forcePage(BM_BufferPool *const bufferPool, BM_PageHandle *const pageHandle)
     return (writeBlock(frame->pageNum, fileHandle, frame->data) == RC_OK) ? RC_OK : RC_WRITE_FAILED;
 }
 
-/* ************************************ Changed ***************************************************** */
+/* ***************************************************************************************** */
 
 Frame *createFrameNode()
 {
@@ -348,7 +333,7 @@ Frame *createFrameNode()
     return frame;
 }
 
-/* *************************************** Changed ************************************************** */
+/* ***************************************************************************************** */
 
 // reset this new frame node when remove this frame from buffer pool.
 void resetFrameNode(Frame *frame)
@@ -364,7 +349,7 @@ void resetFrameNode(Frame *frame)
     frame->pageNum = NO_PAGE;
 }
 
-/* ************************************* Changed ++ **************************************************** */
+/* ***************************************************************************************** */
 
 // create a map to record the utility of every frames, used for LRU
 int *createHash(int capacity)
@@ -391,7 +376,7 @@ int *createHash(int capacity)
     return hash;
 }
 
-/* *************************************** chaged  ++************************************************** */
+/* ***************************************++************************************************** */
 
 // Create a cache area for pages
 PageCache *createPageCache(BM_BufferPool *const bufferPool, int pageFrameCount)
@@ -499,7 +484,7 @@ PageCache *createPageCache(BM_BufferPool *const bufferPool, int pageFrameCount)
     return cache;
 }
 
-/* ********************************* changed ******************************************************** */
+/* ***************************************************************************************** */
 
 int isFull(PageCache *cache)
 {
@@ -509,7 +494,7 @@ int isFull(PageCache *cache)
     }
     return (cache->frameCnt == cache->capacity);
 }
-/* *************************************** changed ************************************************** */
+/* ***************************************************************************************** */
 
 int isEmpty(PageCache *cache)
 {
@@ -519,7 +504,7 @@ int isEmpty(PageCache *cache)
     }
     return (cache->frameCnt == 0);
 }
-/* **************************************** changed ************************************************* */
+/* ***************************************************************************************** */
 
 
 RC addPageToPageCacheWithLRU(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle,
@@ -629,7 +614,7 @@ hashTable[cache->capacity - 1] = pageNum;
 return RC_OK; // Return success after the page is added to the cache
 }
 
-/* ************************************** chnaged *************************************************** */
+/* ***************************************************************************************** */
 
 Frame *isHitPageCache(PageCache *cache, const PageNumber pageNum)
 {
@@ -656,7 +641,7 @@ Frame *isHitPageCache(PageCache *cache, const PageNumber pageNum)
     
     return NULL; // Return NULL if the page is not found
 }
-/* *********************************** chnaged ****************************************************** */
+/* ***************************************************************************************** */
 
 RC updateLRUOrder(PageCache *cache, int pageNum)
 {
@@ -702,12 +687,7 @@ RC updateLRUOrder(PageCache *cache, int pageNum)
     return RC_OK;
 }
 
-/* ************************************** changed *************************************************** */
-
-
-/* ************************************* chsanged **************************************************** */
-
-
+/* ***************************************************************************************** */
 
 PageNumber *getFrameContents(BM_BufferPool *const bufferPool)
 {
@@ -742,7 +722,7 @@ PageNumber *getFrameContents(BM_BufferPool *const bufferPool)
     return frames; // Return the array containing the page numbers
 }
 
-/* ************************************ ok ***************************************************** */
+/* ***************************************************************************************** */
 
 int *getDirtyFlags(BM_BufferPool *const bufferPool)
 {
@@ -761,7 +741,7 @@ int *getDirtyFlags(BM_BufferPool *const bufferPool)
     return frames;
 }
 
-/* *************************************** changed ************************************************** */
+/* ***************************************************************************************** */
 
 RC addPageToPageCacheWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle, int pageNum)
 {
@@ -821,7 +801,7 @@ RC addPageToPageCacheWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *co
 
     return RC_OK; // Return success after adding the page
 }
-/* ************************************** changed *************************************************** */
+/* ***************************************************************************************** */
 
 
 int *getFixCounts(BM_BufferPool *const bufferPool)
@@ -851,7 +831,7 @@ int *getFixCounts(BM_BufferPool *const bufferPool)
     return frames;
 }
 
-/* ************************************** changed *************************************************** */
+/* ***************************************************************************************** */
 
 int getNumReadIO(BM_BufferPool *const bufferPool)
 {
@@ -868,7 +848,7 @@ int getNumReadIO(BM_BufferPool *const bufferPool)
     return cache ? cache->numRead : -1;
 }
 
-/* ********************************** changed ******************************************************* */
+/* ***************************************************************************************** */
 
 RC markDirty(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle)
 {
@@ -891,7 +871,7 @@ RC markDirty(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle)
     return RC_OK;
 }
 
-/* ************************************* changed **************************************************** */
+/* ***************************************************************************************** */
 
 // Locate the frame containing the requested page
 Frame *searchPageFromCache(PageCache *const cache, int pageNum)
@@ -916,7 +896,7 @@ Frame *searchPageFromCache(PageCache *const cache, int pageNum)
     return NULL;
 }
 
-/* **************************************** changed ************************************************* */
+/* ***************************************************************************************** */
 
 RC unpinPage(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle)
 {
@@ -943,7 +923,7 @@ RC unpinPage(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle)
     return RC_OK;
 }
 
-/* ********************************** ok ******************************************************* */
+/* ***************************************************************************************** */
 
 // Free allocated frames in the page cache
 void freeFrames(PageCache *cache)
@@ -963,7 +943,7 @@ void freeFrames(PageCache *cache)
     }
 }
 
-/* **************************************** ok ************************************************* */
+/* ***************************************************************************************** */
 
 // Free allocated file handle
 void freeFileHandle(PageCache *cache)
@@ -971,7 +951,7 @@ void freeFileHandle(PageCache *cache)
     free(cache->File_Handle);
 }
 
-/* ************************************* ok **************************************************** */
+/* ***************************************************************************************** */
 
 // Free allocated hash table
 void freeHashTable(PageCache *cache)
@@ -979,7 +959,7 @@ void freeHashTable(PageCache *cache)
     free(cache->hashTable);
 }
 
-/* ************************************** ok *************************************************** */
+/* ***************************************************************************************** */
 
 // Deallocate the entire page cache
 void freePageCache(PageCache *cache)
@@ -993,7 +973,7 @@ void freePageCache(PageCache *cache)
     }
 }
 
-/* ******************************************* chnaged ********************************************** */
+/* ***************************************************************************************** */
 
 Frame *removePageWithLRU(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle, int leastUsedPage)
 {
@@ -1038,54 +1018,7 @@ Frame *removePageWithLRU(BM_BufferPool *const bufferPool, BM_PageHandle *const P
 
     return frame;
 }
-
-/* ********************************************* changed ******************************************** */
-// RC getFrameToEvict(BM_BufferPool *bufferPool, Frame **frame)
-// {
-//     // Ensure buffer pool is valid
-//     if (!bufferPool || !frame)
-//     {
-//         return RC_INVALID_PARAMETER;
-//     }
-
-//     // Retrieve the cache from buffer pool
-//     PageCache *cache = bufferPool->mgmtData;
-    
-//     // Loop through the frames to find an unpinned frame
-//     if (cache->frames[cache->head]->pinCount > 0)
-//     {
-//         while (cache->frames[cache->head]->pinCount > 0)
-//         {
-//             // Move head pointer to the next frame
-//             cache->head = (cache->head + 1) % cache->capacity;
-//         }
-
-//         // Retrieve the frame to evict
-//         *frame = cache->frames[cache->head];
-
-//         // If the frame is dirty, write it back to disk before removal
-//         if ((*frame)->dirtyBit)
-//         {
-//             RC status = forcePage(bufferPool, *frame);
-//             if (status != RC_OK)
-//             {
-//                 return status;
-//             }
-//             cache->numWrite++;
-//         }
-
-//         // Update the tail pointer to point to the previous frame
-//         cache->tail = (cache->head == 0) ? cache->capacity - 1 : cache->head - 1;
-//     }
-//     else
-//     {
-//         *frame = cache->frames[cache->head];
-//     }
-
-//     return RC_OK;
-// }
-
-/* ********************************************* changed ******************************************** */
+/* ***************************************************************************************** */
 
 
 RC removePageWithFIFO(BM_BufferPool *const bufferPool, BM_PageHandle *const Page_Handle)
@@ -1160,7 +1093,7 @@ resetFrameNode(frame);
 return RC_OK;
 }
 
-/* ******************************************** changed ********************************************* */
+/* ***************************************************************************************** */
 
 int getNumWriteIO(BM_BufferPool *const bufferPool)
 {
