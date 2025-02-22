@@ -139,7 +139,7 @@ Description for all the Functions in `buffer_mgr.h` are as follows:
 
 * #### 5.3 createhash: Creates a hash table for page lookup.
 
-## Testing Plan
+## Testing Results
 
 1.  We executed the `test_assign_2_1.c` and all testcase passed. (I just put
     part of result from screenshot)
