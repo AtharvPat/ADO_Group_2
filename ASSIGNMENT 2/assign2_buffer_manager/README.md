@@ -27,7 +27,7 @@ File | Description
 
 ## Function Hierarchy
 
-# ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%202/assign2_buffer_manager/Images/Buffer_mgr.png)
+# ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%202/assign2_buffer_manager/Images/diagram.png)
 
 # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%202/assign2_buffer_manager/Images/Buffer_mgr.png)
 
