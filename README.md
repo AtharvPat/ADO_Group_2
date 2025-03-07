@@ -9,6 +9,8 @@ Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11
 2. name -> char_name
 3. schema -> scheme
 4. schema_info -> scheme_info
+5. page -> page_handle
+6. bm -> bm_pool
 
 ## take reference from the following code
 https://github.com/hanggrian/IIT-CS525/tree/main/assign3
