@@ -5,10 +5,10 @@ Atharv | '3. boolNot' , '4. boolAnd' , '5. boolOr' | '1. initRecordManager' , '2
 Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11. deleteRecord' , '14. startScan' , '15. next' , '20. createRecord' , '25. intToString' , '26. setAttr'
 
 ## changes in variables of record_mgr.c
-fHandle -> fileHandle
-name -> char_name
-schema -> scheme
-schema_info -> scheme_info
+1. fHandle -> fileHandle
+2. name -> char_name
+3. schema -> scheme
+4. schema_info -> scheme_info
 
 ## take reference from the following code
 https://github.com/hanggrian/IIT-CS525/tree/main/assign3
