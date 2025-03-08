@@ -7,10 +7,13 @@ Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11
 ## changes in variables of record_mgr.c
 1. fHandle -> fileHandle
 2. name -> char_name
-3. schema -> scheme
-4. schema_info -> scheme_info
-5. page -> page_handle
-6. bm -> bm_pool
+3. schema_info -> scheme_info
+4. bm -> bm_pool
+5. rel -> table_data
+6. schema -> scheme
+7. attrNum -> attr_bum
+8. attrValue -> attr_Value
+   
 
 ## take reference from the following code
 https://github.com/hanggrian/IIT-CS525/tree/main/assign3
