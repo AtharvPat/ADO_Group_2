@@ -8,7 +8,7 @@ Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11
 1. fHandle -> fileHandle
 2. name -> char_name  (error = struct "RM_TableData" has no field "char_name"C/C++(136)) in open table
 3. schema_info -> scheme_info 
-4. bm -> bm_pool
+4. bm -> bufferPool
 5. rel -> table_data  (error = struct "RM_ScanHandle" has no field "table_data"C/C++(136)) in RC startscan and RC next 
 6. schema -> scheme (error = struct "RM_TableData" has no field "scheme"C/C++(136)) [dont change] 
 7. attrNum -> attr_num
