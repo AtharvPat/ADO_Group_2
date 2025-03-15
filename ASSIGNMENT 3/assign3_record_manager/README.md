@@ -2,6 +2,13 @@
 
 In this Repository, we worked on a Record Manager, which is responsible for managing records in a database. It includes functionalities such as table creation, insertion, deletion, updating, and querying records.
 
+## Implementation Video link 
+
+Basic walkthrough of our Record Manager implementation for Assignment 3. We’ve looked at the code, the file structure, built the project, and ran the tests.   
+
+https://drive.google.com/file/d/1_mSx23q5JjKn9yis6CZoEpgNj7asPYiI/view?usp=sharing
+
+
 ## Contributions
 
 `CWID` | `Name` | `Contribution` | `Contribution Percentage`
