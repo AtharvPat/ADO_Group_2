@@ -12,7 +12,7 @@ A20588887 |[Manthan Surjuse](https://github.com/Manthan0120) | closeTable, delet
 
 ## Files
 
- # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%202/assign2_buffer_manager/Images/Files.png)
+ # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%203/assign3_record_manager/Images/Screenshot%202025-03-14%20at%209.30.42%E2%80%AFPM.png)
 
 File | Description
 -----|------------- 
@@ -24,7 +24,9 @@ File | Description
 
 ## Function Hierarchy
 
-# ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%202/assign2_buffer_manager/Images/Buffer_mgr.png)
+# ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%203/assign3_record_manager/Images/harierchy.png)
+# ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%203/assign3_record_manager/Images/h.png)
+
 
 ## Environment versions 
 
