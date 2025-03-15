@@ -6,9 +6,9 @@ In this Repository, we worked on a Record Manager, which is responsible for mana
 
 `CWID` | `Name` | `Contribution` | `Contribution Percentage`
 -----|------|--------------|----------------------
-A20580674 |[Atharv Patil](https://github.com/AtharvPat) | initRecordManager, shutdownRecordManager, openTable, getNumTuples, getRecords, insertRecord, closeScan, freeSchema, freeRecord, getStringAttr, createPageDirectoryNode | `33.33%`
-A25078342 |[Avneet Singh](https://github.com/asingh180) | createTable, FlushDataToPage, updateRecord, getRecord, getRecordSize, *createSchema, getNumAttr, getAttr | `33.33%`
-A20588887 |[Manthan Surjuse](https://github.com/Manthan0120) | closeTable, deleteTable, deleteRecord, startScan, next, createRecord, setAttr, intToString | `33.33%`
+A20580674 |[Atharv Patil](https://github.com/AtharvPat) | initRecordManager, shutdownRecordManager, openTable, getNumTuples, getRecords, insertRecord, closeScan, freeSchema, freeRecord, getStringAttr, createPageDirectoryNode, Made Implementation Video | `33.33%`
+A25078342 |[Avneet Singh](https://github.com/asingh180) | createTable, FlushDataToPage, updateRecord, getRecord, getRecordSize, *createSchema, getNumAttr, getAttr, Made File Hierarchy Diagram | `33.33%`
+A20588887 |[Manthan Surjuse](https://github.com/Manthan0120) | closeTable, deleteTable, deleteRecord, startScan, next, createRecord, setAttr, intToString, Made README.md file | `33.33%`
 
 ## Files
 
