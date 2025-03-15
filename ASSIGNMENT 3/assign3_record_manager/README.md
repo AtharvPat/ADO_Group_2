@@ -15,12 +15,20 @@ A20588887 |[Manthan Surjuse](https://github.com/Manthan0120) | closeTable, delet
  # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%203/assign3_record_manager/Images/Screenshot%202025-03-14%20at%209.30.42%E2%80%AFPM.png)
 
 File | Description
------|------------- 
-`record_mgr.c*` | Implements record manager functionalities such as creating tables, inserting, updating, deleting, and retrieving records.
-`record_mgr.h*`  | Header file containing function definitions for the record manager.
-`dberror.*` | This file contains all possible errors and Keeps tracks of error.
-`storage_mgr.c` | Implements storage manager functionalities.
-`test_record_mgr.c` | Contains test cases for the record manager implementation.
+--- | ---
+buffer_mgr.* | Manages memory page frames and page files.
+buffer_mgr_stat.* | Statistic interfaces of Buffer Manager.
+dt.h | Boolean constants.
+__expr.*__ | Parse condition expression in the scan.
+__record_mgr.*__ | Responsible for managing tables in this database.
+store_mgr.* | Responsible for managing database in files and memory.
+dberror.* | Keeps track and report different types of error.
+__rm_serializer.*__ | Responsible for serialize and deserialize data stored in files.
+__tables.h__ | Define useful data structures and functions to implement the record manager. |
+__test_assign3_1.c__ | Base test cases.
+__test_helper.h__ | Testing and assertion tools.
+__test_expr.h__ | Testing the expression functions.
+
 
 ## Function Hierarchy
 
