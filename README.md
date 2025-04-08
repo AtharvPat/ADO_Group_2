@@ -16,4 +16,4 @@ Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11
    
 
 ## take reference from the following code
-https://github.com/hanggrian/IIT-CS525/tree/main/assign3
+https://github.com/MR-KARPIN/AdvancedDatabaseOrganization
