@@ -16,9 +16,9 @@ Walkthrough of our B+ tree Implementation for Assignment 4. This includes code s
 
 | CWID       | Name                                                                 | Contribution                                                                                  | Percentage |
 |------------|----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|------------|
-| A20580674  | [Atharv Patil](https://github.com/AtharvPat)                         | `initIndexManager`, `shutdownIndexManager`, `findKey`, `insertKey`, `closeTreeScan`, `printTree`, Made Implementation Video | 33.33%     |
-| A25078342  | [Avneet Singh](https://github.com/asingh180)                         | `createBtree`, `getNumEntries`, `deleteKey`, `getKeyType`, `openTreeScan`, `nextEntry`, Made Index Structure Diagram | 33.33%     |
-| A20588887  | [Manthan Surjuse](https://github.com/Manthan0120)                    | `openBtree`, `deleteBtree`, `closeBtree`, `getNumNodes`, `openTreeScan`, Made README.md file | 33.33%     |
+| A20580674  | [Atharv Patil](https://github.com/AtharvPat)                         | `initIndexManager`, `shutdownIndexManager`, `findKey`, `insertKey`, `closeTreeScan`, `printTree`, Made README.md file  | 33.33%     |
+| A25078342  | [Avneet Singh](https://github.com/asingh180)                         | `createBtree`, `getNumEntries`, `deleteKey`, `getKeyType`, `openTreeScan`, `nextEntry`, Made Implementation Video | 33.33%     |
+| A20588887  | [Manthan Surjuse](https://github.com/Manthan0120)                    | `openBtree`, `deleteBtree`, `closeBtree`, `getNumNodes`, `openTreeScan`, Updated MakeFile  | 33.33%     |
 
 ---
 
@@ -40,7 +40,9 @@ Walkthrough of our B+ tree Implementation for Assignment 4. This includes code s
 
 ---
 
-## Function Hierarchy
+## Files
+
+ # ![image](https://github.com/AtharvPat/ADO_Group_2/blob/main/ASSIGNMENT%204/assign4_btree_mgr/images/files_images.jpg)
 
 
 ## Environment versions 
