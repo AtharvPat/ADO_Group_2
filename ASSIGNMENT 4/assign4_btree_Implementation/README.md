@@ -16,9 +16,9 @@ Walkthrough of our B+ tree Implementation for Assignment 4. This includes code s
 
 | CWID       | Name                                                                 | Contribution                                                                                  | Percentage |
 |------------|----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|------------|
-| A20580674  | [Atharv Patil](https://github.com/AtharvPat)                         | `initIndexManager`, `shutdownIndexManager`, `findKey`, `insertKey`, `closeTreeScan`, `printTree`, Made README.md file  | 33.33%     |
-| A25078342  | [Avneet Singh](https://github.com/asingh180)                         | `createBtree`, `getNumEntries`, `deleteKey`, `getKeyType`, `openTreeScan`, `nextEntry`, Made Implementation Video | 33.33%     |
-| A20588887  | [Manthan Surjuse](https://github.com/Manthan0120)                    | `openBtree`, `deleteBtree`, `closeBtree`, `getNumNodes`, `openTreeScan`, Updated MakeFile  | 33.33%     |
+| A20580674  | [Atharv Patil](https://github.com/AtharvPat)                         | `initIndexManager`, `shutdownIndexManager`, `findKey`, `insertKey`, `closeTreeScan`, `printTree`, `getDataBeforeSeparatorForInt`,`addNewKeyAndPointerToNonLeaf`,  Made README.md file  | 33.33%     |
+| A25078342  | [Avneet Singh](https://github.com/asingh180)                         | `createBtree`, `getNumEntries`, `deleteKey`, `getKeyType`, `openTreeScan`, `nextEntry`, `prepareWritableMetaData`, `keyPointerFormattedData`, Made Implementation Video | 33.33%     |
+| A20588887  | [Manthan Surjuse](https://github.com/Manthan0120)                    | `openBtree`, `deleteBtree`, `closeBtree`, `getNumNodes`, `openTreeScan`, `prepareWritablePageData`, `findPageToInsertNewEntry`, Updated MakeFile  | 33.33%     |
 
 ---
 
@@ -140,7 +140,7 @@ Description for all the functions in `btree_mgr.h` are as follows:
 git clone <repo_url>
 
 # Step 2: Navigate to the project directory
-cd assign4_btree_index_manager
+cd assign4_btree_Implementation
 
 # Step 3: Clean old build files
 make clean

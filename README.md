@@ -1,19 +1,79 @@
-Name | function | record_mgr.c
---- | --- | --- 
-Avneet | '1. value equals' , '2. value smaller' | '3. createTable' , '8. FlushDataToPage' , '12. updateRecord', '13.getRecord' , 17. getRecordSize', '18. *createSchema', '23. getNumAttr' , '24. getAttr'
-Atharv | '3. boolNot' , '4. boolAnd' , '5. boolOr' | '1. initRecordManager' , '2. shutdownRecordManager' , '4. openTable' , '7. getNumTuples', '9.getRecords', '10.insertRecord' , '16.closeScan' , '19. freeSchema' , '21. freeRecord' , '22. getStringAttr' , '27. createPageDirectoryNode'
-Manthan | '6. evalExpr' , '7. freeExpr' | '5. closeTable' , '6.deleteTable', '11. deleteRecord' , '14. startScan' , '15. next' , '20. createRecord' , '25. intToString' , '26. setAttr'
+# CS525 Advanced Database Organization – ADO Assignments
 
-## changes in variables of record_mgr.c
-1. fHandle -> fileHandle
-2. name -> char_name  (error = struct "RM_TableData" has no field "char_name"C/C++(136)) in open table
-3. schema_info -> scheme_info 
-4. bm -> bufferPool
-5. rel -> table_data  (error = struct "RM_ScanHandle" has no field "table_data"C/C++(136)) in RC startscan and RC next 
-6. schema -> scheme (error = struct "RM_TableData" has no field "scheme"C/C++(136)) [dont change] 
-7. attrNum -> attr_num
-8. attrValue -> attr_value
-   
+This repository contains implementations of four core assignments for the **CS525: Advanced Database Organization** course at **Illinois Institute of Technology**.
 
-## take reference from the following code
-https://github.com/MR-KARPIN/AdvancedDatabaseOrganization
+## 🧑‍💻 Team Members
+- **Atharv Patil**
+- **Manthan Surjuse**
+- **Avneet Singh**
+
+> Implemented in **C/C++**, this project demonstrates fundamental components of database internals.
+
+---
+
+## 📚 Assignments Overview
+
+### 1. 📦 Storage Manager
+Implements low-level file management using fixed-size pages. Core functionalities include:
+- Creating/opening/closing files
+- Reading/writing specific pages
+- Ensuring persistence and page alignment
+
+### 2. 🧠 Buffer Manager
+Simulates a buffer pool that caches disk pages in memory with replacement strategies like:
+- FIFO
+- LRU
+- Clock (optional)
+
+Features include:
+- Pinning/unpinning pages
+- Tracking dirty pages and hit count
+- Page eviction and flushing
+
+### 3. 📄 Record Manager
+Built on top of the storage and buffer managers, this module supports:
+- Record schema definition
+- Insert/update/delete/search records
+- Record scanning with condition expressions
+
+### 4. 🌳 B+ Tree Indexing
+Implements a disk-based **B+ Tree** for indexing and fast lookups. Includes:
+- Key insertion and node splitting
+- Index-based search and deletion
+- Tree traversal and visualization (optional)
+
+---
+
+## 🛠️ Technologies
+- **C/C++**
+- Manual memory management
+- File I/O
+- Custom data structures (linked lists, tree nodes, etc.)
+
+---
+
+## 📁 Folder Structure
+
+```
+├── ASSIGNMENT 1/ assign1_storage_manager/
+├── ASSIGNMENT 2/ assign2_buffer_manager/
+├── ASSIGNMENT 3/ assign3_record_manager/
+├── ASSIGNMENT 4/ assign4_btree_Implementation/
+└── README.md
+```
+
+## 📌 Notes
+- This project was completed as part of coursework and is not intended for production use.
+- All code was written from scratch without using external DBMS libraries.
+
+---
+
+## 📫 Contact
+
+For academic inquiries or contributions, feel free to reach out via linkedin or GitHub.
+
+| Name | Linkedin | Github
+|---|---|---                                                     
+**Atharv Patil** | [Linkedin](https://www.linkedin.com/in/atharv-patil-414b531b4/) | [Github](https://github.com/AtharvPat) |
+**Manthan Surjuse** | [Linkedin](https://www.linkedin.com/in/manthan-surjuse/) | [Github](https://github.com/Manthan0120)   
+**Avneet Singh** | [Linkedin](https://www.linkedin.com/in/avneet-singh120/) | [Github](https://github.com/asingh180)  
